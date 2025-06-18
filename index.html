@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World App 🌍</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #a18cd1, #fbc2eb);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            text-align: center;
+        }
+
+        #message {
+            font-size: 3rem;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 30px 50px;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div id="message">🌟 Loading... 🌟</div>
+
+    <script>
+        fetch("http://localhost:5000/api/hello")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("message").innerText = 👋 ${data.message} 🌈;
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+                document.getElementById("message").innerText = "❌ Failed to load message";
+            });
+    </script>
+</body>
+</html>
