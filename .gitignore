@@ -6,5 +6,4 @@ dist/
 htmlcov/
 .tox/
 docs/_build/
-/prototype
 .env
