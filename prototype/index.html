@@ -28,9 +28,11 @@
 </head>
 <body>
     <div id="message">🌟 Loading... 🌟</div>
+    
+<script src="config.js"></script>
 
     <script>
-        fetch("http://localhost:5000/api/Namaste")
+        fetch(`${CONFIG.API_URL}/api/Namaste`)
             .then(response => response.json())
             .then(data => {
                 document.getElementById("message").innerText = `👋 ${data.message} 🌻`;
