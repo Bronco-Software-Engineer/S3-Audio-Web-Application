@@ -5,7 +5,7 @@ import os
 app = Flask(__name__, static_folder='.')
 CORS(app)
 
-@app.route("/api/Namaste", methods=["GET"])
+@app.route("/api/hello", methods=["GET"])
 def hello():
     return jsonify(message="Hello World")
 
