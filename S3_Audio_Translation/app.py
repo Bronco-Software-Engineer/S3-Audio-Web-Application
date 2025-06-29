@@ -112,4 +112,3 @@ with st.sidebar.expander("ℹ️ How to use"):
     """)
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("Made with ❤️ by Krishnat")
