@@ -8,3 +8,4 @@ htmlcov/
 docs/_build/
 .env
 /myenv
+/temp_files
