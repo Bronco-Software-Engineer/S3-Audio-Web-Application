@@ -15,10 +15,10 @@ if not os.path.exists("temp_files"):
     os.makedirs("temp_files")
 # Initialize S3 client (make sure your AWS credentials are configured)
 s3_client = boto3.client('s3')
-S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')  # Replace with your bucket name
+S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")  # Replace with your bucket name
 
 # Set OpenAI API key
-openai.api_key = os.getenv('OPENAI_API_KEY')  # Replace with your actual key
+openai.api_key = os.getenv("OPENAI_API_KEY")  # Replace with your actual key
 
 # ------------------------- AUTHENTICATION -------------------------
 if "authenticated" not in st.session_state:
@@ -75,7 +75,7 @@ if not st.session_state.authenticated:
     st.stop()
 
 # ------------------------- MAIN APPLICATION -------------------------
-st.title("🎙️ Shruti Lipi Anuvadak")
+st.title("🎙️ Shrutilipi Anuvadak")
 
 # Cleanup function to remove temp files
 def cleanup_temp_files():
@@ -88,7 +88,7 @@ def cleanup_temp_files():
             st.error(f"Error deleting {file_path}: {e}")
 
 # Sidebar navigation
-app_mode = st.sidebar.radio("Navigation", ["Create New Recording", "View Files", "Upload Custom File"])
+app_mode = st.sidebar.radio("Navigation", ["View Files", "Create New Recording","Upload Custom File"])
 
 if app_mode == "View Files":
     # ------------------------- FILE VIEWING AND PROCESSING -------------------------
@@ -114,6 +114,7 @@ if app_mode == "View Files":
         if st.button("Transcribe & Translate Audio"):
             with st.spinner("Processing audio..."):
                 try:
+                    # Download and process file
                     safe_filename = os.path.basename(selected_file).replace("/", "_")
                     temp_path = os.path.join("temp_files", f"temp_{safe_filename}")
                     
@@ -151,6 +152,7 @@ if app_mode == "View Files":
                         st.download_button("Download Transcript", transcript, f"{selected_file}_transcript.txt")
                     
                     # Clean up
+                    # os.unlink(temp_path)
                     if os.path.exists(temp_path):
                         os.unlink(temp_path)
                 except Exception as e:
@@ -172,6 +174,7 @@ elif app_mode == "Create New Recording":
             st.success("Recording complete!")
             
             try:
+                # Save recording to temporary file
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 temp_filename = os.path.join("temp_files", f"recording_{timestamp}.wav")
                 
@@ -185,9 +188,7 @@ elif app_mode == "Create New Recording":
                 if 'temp_filename' in locals() and os.path.exists(temp_filename):
                     os.unlink(temp_filename) 
     if 'latest_recording' in st.session_state and os.path.exists(st.session_state.latest_recording): 
-
                  # Upload to S3
-        print("before upload click")
         if st.button("📤 Upload to S3"):
             try:
                 with st.spinner("Uploading to S3..."):
@@ -197,11 +198,8 @@ elif app_mode == "Create New Recording":
                     # Verify file exists and has content
                     if not os.path.exists(temp_filename):
                         st.error("File not found. Please record again.")
-                        # return
-                    
                     elif os.path.getsize(temp_filename) == 0:
                         st.error("Recording file is empty. Please record again.")
-                        # return
                     else:
                     # Upload to S3
                         success, s3_key = upload_to_s3(
@@ -221,6 +219,7 @@ elif app_mode == "Create New Recording":
                 st.error(f"⚠️ Error during upload: {e}")
                 if 'temp_filename' in locals() and os.path.exists(temp_filename):
                     os.unlink(temp_filename)
+
 elif app_mode == "Upload Custom File":
     st.header("📤 Upload Custom File")
     
@@ -254,7 +253,6 @@ elif app_mode == "Upload Custom File":
             # Clean up temp file
             if os.path.exists(temp_path):
                 os.unlink(temp_path)
-
 
 # ------------------------- SIDEBAR FOOTER -------------------------
 st.sidebar.markdown("---")

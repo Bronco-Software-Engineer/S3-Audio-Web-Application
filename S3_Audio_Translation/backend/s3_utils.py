@@ -1,6 +1,7 @@
 import os
 import boto3
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -15,10 +16,6 @@ s3_client = boto3.client(
     aws_secret_access_key=aws_secret_access_key,
     region_name=aws_region
 )
-
-import boto3
-from datetime import datetime
-import os
 
 
 def list_s3_audio_files(bucket_name):
@@ -53,17 +50,7 @@ def upload_to_s3(bucket_name, local_path, s3_key=None, user_email=None):
         return False, str(e)
 
 def upload_custom_file_to_s3(bucket_name, local_file_path, user_email=None):
-    """
-    Uploads any custom file from the user's local system to S3 under their folder.
-    
-    Args:
-        bucket_name (str): Name of the S3 bucket.
-        local_file_path (str): Full path to the local file.
-        user_email (str, optional): User's email to organize files in user-specific folders.
-        
-    Returns:
-        (bool, str): Tuple indicating
-    """
+
     # Generate a unique key for the file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = os.path.basename(local_file_path)
