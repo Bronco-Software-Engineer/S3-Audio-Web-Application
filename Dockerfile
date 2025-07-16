@@ -24,4 +24,4 @@ COPY . .
 EXPOSE 8501
 # Command to run the Streamlit app with environment variables
 # The actual environment variables will be passed during `docker run` on EC2
-CMD ["streamlit", "run", "newapp.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "S3_Audio_Translation/newapp.py", "--server.port=8501", "--server.address=0.0.0.0"]
