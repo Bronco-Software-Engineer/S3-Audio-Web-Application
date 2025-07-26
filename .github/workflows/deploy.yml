@@ -48,7 +48,7 @@ jobs:
           python -m venv .venv
           source .venv/bin/activate
           python3 -m pip install -r requirements.txt
-          pytest tests/ --maxfail=1 --disable-warnings --tb=short
+          pytest S3_Audio_Translation/tests/ --maxfail=1 --disable-warnings --tb=short
      
       - name: Build and push Docker image to Docker Hub
         uses: docker/build-push-action@v5
