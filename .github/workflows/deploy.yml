@@ -22,23 +22,34 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # - name: Run Unit Tests
-      #   run: |
-      #     pytest tests/ --maxfail=1 --disable-warnings --tb=short
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: adding essentials
+        run: |
+          sudo apt-get update && sudo apt-get install -y \
+            build-essential \
+            libpq-dev \
+            portaudio19-dev \
+            libasound-dev \
+            libgfortran5 \
+            --no-install-recommends && \
+          sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*
+
+      - name: Install dependencies for testing
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install  --no-cache-dir  -r requirements.txt
+
+      - name: Run Unit Tests
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          python3 -m pip install -r requirements.txt
+          pytest tests/ --maxfail=1 --disable-warnings --tb=short
      
-
-      # - name: Set up Python
-      #   uses: actions/setup-python@v5
-      #   with:
-      #     python-version: '3.9'
-
-      # - name: Install dependencies for testing
-      #   run: |
-      #     python3 -m pip install --upgrade pip
-      #     python3 -m pip install -r requirements.txt
-      # - name: Run Unit Tests
-      #   run: |
-      #     pytest tests/ --maxfail=1 --disable-warnings --tb=short
       - name: Build and push Docker image to Docker Hub
         uses: docker/build-push-action@v5
         with:
